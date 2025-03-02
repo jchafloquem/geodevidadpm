@@ -1,19 +1,22 @@
 @keyframes zoomInOut {
-  0%, 100% {
+  100% {
     transform: scale(1);
   }
-  25% {
+  75% {
     transform: scale(2);
   }
   50% {
     transform: scale(3);
   }
-  75% {
+  25% {
     transform: scale(4);
+  }
+  0% {
+    transform: scale(5);
   }
 }
 .animate-zoom {
-  animation: zoomInOut 5s ease-in-out infinite;
+  animation: zoomInOut 10s ease-in-out infinite;
 }
 
 @keyframes backgroundChange {
@@ -34,5 +37,5 @@
   }
 }
 .animate-background {
-  animation: backgroundChange 25s infinite;
+  animation: backgroundChange 10s infinite;
 }

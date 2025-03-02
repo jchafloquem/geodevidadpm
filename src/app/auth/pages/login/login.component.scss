@@ -16,7 +16,7 @@
   }
 }
 .animate-zoom {
-  animation: zoomInOut 5s ease-in-out infinite;
+  animation: zoomInOut 10s ease-in-out infinite;
 }
 
 @keyframes backgroundChange {
@@ -37,5 +37,5 @@
   }
 }
 .animate-background {
-  animation: backgroundChange 8s infinite;
+  animation: backgroundChange 10s infinite;
 }
