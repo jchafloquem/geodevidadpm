@@ -2,14 +2,17 @@
   0%, 100% {
     transform: scale(1);
   }
-  25% {
+  75% {
     transform: scale(2);
   }
   50% {
     transform: scale(3);
   }
-  75% {
+  25% {
     transform: scale(4);
+  }
+  0% {
+    transform: scale(5);
   }
 }
 .animate-zoom {
@@ -18,21 +21,21 @@
 
 @keyframes backgroundChange {
   0% {
-    background-image: url('/assets/images/welcome/welcome1.jpg');
+    background-image: url('/assets/images/login/login1.jpg');
   }
   25% {
-    background-image: url('/assets/images/welcome/welcome2.avif');
+    background-image: url('/assets/images/login/login2.avif');
   }
   50% {
-    background-image: url('/assets/images/welcome/welcome3.jpg');
+    background-image: url('/assets/images/login/login3.jpg');
   }
   75% {
-    background-image: url('/assets/images/welcome/welcome2.avif');
+    background-image: url('/assets/images/login/login2.avif');
   }
   100% {
-    background-image: url('/assets/images/welcome/welcome1.jpg');
+    background-image: url('/assets/images/login/login1.jpg');
   }
 }
 .animate-background {
-  animation: backgroundChange 25s infinite;
+  animation: backgroundChange 8s infinite;
 }

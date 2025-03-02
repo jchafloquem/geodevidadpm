@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @include mat.core();
+
 $my-primary-color: (
 	50: #f0fdf5,
 	100: #dbfde9,
@@ -57,8 +58,8 @@ $my-palette-accent: mat.m2-define-palette($my-accent-color, 600);
 // * font
 
 $my-custom-level: mat.m2-define-typography-config(
-	$body-2: mat.m2-define-typography-level(14px, 24px, 500),
-	$body-1: mat.m2-define-typography-level(14px, 20px, 400),
+  $body-1: mat.m2-define-typography-level(14px, 20px, 400),
+  $body-2: mat.m2-define-typography-level(16px, 24px, 500),
 	$headline-1: mat.m2-define-typography-level(24px, 32px, 400),
 	$headline-2: mat.m2-define-typography-level(24px, 32px, 400),
 	$headline-3: mat.m2-define-typography-level(24px, 32px, 400),
@@ -69,7 +70,7 @@ $my-custom-level: mat.m2-define-typography-config(
 	$button: mat.m2-define-typography-level(14px, 14px, 400),
 );
 
-//* tema propio
+//* Theme
 $my-theme: mat.m2-define-light-theme(
 	(
 		color: (

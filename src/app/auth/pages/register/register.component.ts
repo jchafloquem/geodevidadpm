@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { hasEmailError, isRequired } from '../../utils/validators';
-import { AuthService } from '../../../data-access/auth.service';
+
 import { toast } from 'ngx-sonner';
 import { Router, RouterLink } from '@angular/router';
 import { GoogleButtomComponent } from '../../ui/google-buttom/google-buttom.component';
+import { AuthService } from '../../access/auth.service';
 
 @Component({
 	selector: 'app-register',

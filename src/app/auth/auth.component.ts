@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss'
 })
-export default class AuthComponent {
+export class AuthComponent {
 
 }

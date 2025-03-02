@@ -8,7 +8,9 @@ module.exports = {
 	content: ['./src/app/**/*.component.{html,ts}'],
 	theme: {
 		extend: {
-
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"], // Agregando fuente personalizada
+      },
 			lineHeight: {
 				xs: '0.5rem',
 				s: '0.625rem',

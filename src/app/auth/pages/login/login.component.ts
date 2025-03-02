@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../../data-access/auth.service';
+
 import { hasEmailError, isRequired } from '../../utils/validators';
 import { toast } from 'ngx-sonner';
 import { GoogleButtomComponent } from '../../ui/google-buttom/google-buttom.component';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../access/auth.service';
 
 @Component({
     imports: [CommonModule, RouterModule, ReactiveFormsModule, GoogleButtomComponent],
@@ -31,7 +32,7 @@ export default class LoginComponent {
 		password: this._formBuilder.nonNullable.control('', [Validators.required])
 	});
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	 async submit() {
+	 async submit():Promise<void> {
 	 	if (this.form.invalid) return;
 	 	try {
 	 		const { email, password } = this.form.value;
@@ -46,10 +47,10 @@ export default class LoginComponent {
 	 }
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	 async submitWithGoogle() {
+	 async submitWithGoogle():Promise<void> {
 	 	try {
 	 		await this._authService.signInWithGoogle();
-	 		toast.success('Ingreso con Google');
+	 		toast.success('Ingreso con cuenta de Google');
 	 		this._router.navigateByUrl('/geovisor/map')
 	 	} catch (error) {
 	 		toast.error('Ocurrio un error');

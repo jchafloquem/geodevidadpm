@@ -26,7 +26,7 @@ export default class GeovisorComponent implements OnInit {
     }, 3000);
 
 
-		console.log('Holi')
+		console.log('Todos los widgets quedarán obsoletos a partir del primer trimestre de 2026.')
   }
 
 }
