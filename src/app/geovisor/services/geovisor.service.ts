@@ -18,8 +18,6 @@ import SpatialReference from '@arcgis/core/geometry/SpatialReference';
 import PopupTemplate from "@arcgis/core/PopupTemplate.js";
 import Zoom from '@arcgis/core/widgets/Zoom.js';
 
-
-
 //* Popup y Clusters
 const popAcuicola = new PopupTemplate({
 	title: 'CULTIVO DE: {PRODUCCIÓ}',
@@ -96,19 +94,108 @@ const popObservaciones = new PopupTemplate({
 		},
 	],
 });
+const dosenvio = new PopupTemplate({
+	title: 'CULTIVO:{CUTIVO}',
+	outFields: ["*"],
+	content: [
+		{
+			type: 'fields',
+			fieldInfos: [
+
+				{
+					fieldName: 'DNI',
+					label: '<b><font>DNI</font></b>',
+					visible: true,
+					stringFieldOption: 'text-box',
+				},
+				{
+					fieldName: 'OZ',
+					label: '<b><font>Oficina Zonal</font></b>',
+					visible: true,
+					stringFieldOption: 'text-box',
+				},
+
+				{
+					fieldName: 'Shape__Area',
+					label: '<b><font>Area (m2)</font></b>',
+					visible: true,
+					stringFieldOption: 'text-box',
+					format: {
+						places: 2, // Solo dos decimales
+						digitSeparator: true // Activa separadores de miles
+					}
+				},
+			],
+		},
+	],
+});
+
+const tresenvio = new PopupTemplate({
+	title: 'DISTRITO:{DISTRITO}',
+	outFields: ["*"],
+	content: [
+		{
+			type: 'fields',
+			fieldInfos: [
+				{
+					fieldName: 'NOMBRES',
+					label: '<b><font>Nombre Completo</font></b>',
+					visible: true,
+					stringFieldOption: 'text-box',
+				},
+				{
+					fieldName: 'DNI_PART',
+					label: '<b><font>DNI</font></b>',
+					visible: true,
+					stringFieldOption: 'text-box',
+				},
+				{
+					fieldName: 'CULTIVO',
+					label: '<b><font>Cultivo</font></b>',
+					visible: true,
+					stringFieldOption: 'text-box',
+				},
+				{
+					fieldName: 'OZ',
+					label: '<b><font>Oficina Zonal / Cultivo</font></b>',
+					visible: true,
+					stringFieldOption: 'text-box',
+				},
+				{
+					fieldName: 'Shape__Area',
+					label: '<b><font>Area (m2)</font></b>',
+					visible: true,
+					stringFieldOption: 'text-box',
+					format: {
+						places: 2, // Solo dos decimales
+						digitSeparator: true // Activa separadores de miles
+					}
+				},
+				{
+					fieldName: 'Shape__Length',
+					label: '<b><font>Perimetro (ml.)</font></b>',
+					visible: true,
+					stringFieldOption: 'text-box',
+					format: {
+						places: 2, // Solo dos decimales
+						digitSeparator: true // Activa separadores de miles
+					}
+				},
+
+
+			],
+		},
+	],
+});
 
 @Injectable({
 	providedIn: 'root',
 })
 
 export class GeovisorSharedService {
-
 	public mapa = new Map({basemap: 'satellite'});
 	public view!: MapView;
-
 	public googleMap!: google.maps.Map;
-
-
 
 //*DATOS_GEOESPACIALES DE IDEP
 	public layerUrls = {
@@ -120,16 +207,25 @@ export class GeovisorSharedService {
 
 		}
 	}
-	//*Servicio de DEVIDA
+//*Servicio de DEVIDA
 		public layerUrlDevida = {
 			baseServicio: 'https://services8.arcgis.com/tPY1NaqA2ETpJ86A/arcgis/rest/services/Mapa_Muestra/FeatureServer',
 			capasdevida: {
 				observaciones:'0',
 				acuicola: '1',
 				segundoEnvio:'2',
-
 		}
 	};
+
+  //*Servicio de DEVIDA
+  public layerUrlDevida2 = {
+    baseServicio: 'https://services8.arcgis.com/tPY1NaqA2ETpJ86A/arcgis/rest/services/Map_Service/FeatureServer',
+    capasdevida: {
+      parcelas3:'5',
+      parcelas2:'6',
+  }
+};
+
 
 	public layers: LayerConfig[] = [
 	//*Servicios de capas base
@@ -172,8 +268,28 @@ export class GeovisorSharedService {
 			labelingInfo: undefined,
 			popupTemplate: popObservaciones,
 			renderer: undefined,
-			visible: true,
+			visible: false,
 			labelsVisible: true,
+			group: 'DEVIDA',
+		},
+    {
+			title: 'SEGUNDO ENVIO',
+			url: `${this.layerUrlDevida2.baseServicio}/${this.layerUrlDevida2.capasdevida.parcelas2}`,
+			labelingInfo: undefined,
+			popupTemplate: dosenvio,
+			renderer: undefined,
+			visible: false,
+			labelsVisible: false,
+			group: 'DEVIDA',
+		},
+    {
+			title: 'TERCER ENVIO',
+			url: `${this.layerUrlDevida2.baseServicio}/${this.layerUrlDevida2.capasdevida.parcelas3}`,
+			labelingInfo: undefined,
+			popupTemplate: tresenvio,
+			renderer: undefined,
+			visible: true,
+			labelsVisible: false,
 			group: 'DEVIDA',
 		},
 		{
@@ -215,9 +331,7 @@ export class GeovisorSharedService {
 	constructor() {}
 
 	initializeMap(mapViewEl: ElementRef): Promise<void> {
-
 		const container = mapViewEl.nativeElement;
-
 		this.layers.forEach((layerConfig) => {
 			let featureLayer;
 			if (layerConfig.popupTemplate == undefined) {
@@ -307,6 +421,22 @@ export class GeovisorSharedService {
 					suggestionsEnabled: true,
 					minSuggestCharacters: 1,
 				},
+        {
+					layer: new FeatureLayer({
+						url: `${this.layerUrlDevida2.baseServicio}/${this.layerUrlDevida2.capasdevida.parcelas3}`,
+						labelsVisible: true
+					}),
+					searchFields: ["DNI_PART"],
+					displayField: "DNI_PART",
+					exactMatch: false,
+					outFields: ["*"],
+					name: "Tercer Envio",
+					placeholder: "Ingrese DNI",
+					maxResults: 5,
+					maxSuggestions: 5,
+					suggestionsEnabled: true,
+					minSuggestCharacters: 1,
+				},
 				{
 					layer: new FeatureLayer({
 						url: `${this.layerUrlDevida.baseServicio}/${this.layerUrlDevida.capasdevida.acuicola}`
@@ -362,11 +492,13 @@ export class GeovisorSharedService {
 			}
 		});
 
+
 			//{position:'top-right', index:0})
 		view.ui.add(new Zoom({view}),{position:'top-right',index:1});
 		view.ui.add(new Home({view }), {position:'top-right',index:2});
 		view.ui.add(new Locate({view, icon:'gps-on-f'}),{position:'top-right', index:3});
 		view.ui.add(new Expand({view, expandTooltip:'Galeria de Mapas Base', content: new BasemapGallery({view, icon:'move-to-basemap'})}), {position:'top-right', index:4});
+
 
 		this.legend = new Legend({view, container: document.createElement('div')});
 		new CoordinateConversion({view });
