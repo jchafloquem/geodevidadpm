@@ -151,7 +151,7 @@ const tresenvio = new PopupTemplate({
 				},
 				{
 					fieldName: 'CULTIVO',
-					label: '<b><font>Cultivo</font></b>',
+					label: '<b><font>Cultivocls</font></b>',
 					visible: true,
 					stringFieldOption: 'text-box',
 				},
@@ -217,6 +217,14 @@ export class GeovisorSharedService {
 		}
 	};
 
+	public urldevidaacuicola = {
+		baseService: 'https://services8.arcgis.com/tPY1NaqA2ETpJ86A/arcgis/rest/services',
+		capas: {
+			ambitoOzZonales: 'ambitosZonales/FeatureServer0',
+
+		}
+	}
+
   //*Servicio de DEVIDA
   public layerUrlDevida2 = {
     baseServicio: 'https://services8.arcgis.com/tPY1NaqA2ETpJ86A/arcgis/rest/services/Map_Service/FeatureServer',
@@ -228,10 +236,19 @@ export class GeovisorSharedService {
 
 
 	public layers: LayerConfig[] = [
-	//*Servicios de capas base
-		//*Capas de Limites Politicos
-
-		{
+    //*Servicios de capas base
+    {
+			title: 'OFICINA ZONAL',
+			url: `${this.urldevidaacuicola.baseService}/${this.urldevidaacuicola.capas.ambitoOzZonales}`,
+			labelingInfo: undefined,
+			//popupTemplate: popCultivo,
+			renderer: undefined,
+			visible: true,
+			labelsVisible: true,
+			group: 'LIMITES DEVIDA',
+		},
+    //*Capas de Limites Politicos
+    {
 			title: 'DISTRITOS',
 			url: `${this.layerUrls.baseService}/${this.layerUrls.limits.distritos}`,
 			labelingInfo: undefined,
@@ -256,61 +273,9 @@ export class GeovisorSharedService {
 			labelingInfo: undefined,
 			popupTemplate: undefined,
 			renderer: undefined,
-			visible: true,
+			visible: false,
 			labelsVisible: true,
-
 			group: 'LIMITES POLITICOS',
-		},
-		//*Capas de DEVIDA
-		{
-			title: 'OBSERVACIONES - 1er ENVIO',
-			url: `${this.layerUrlDevida.baseServicio}/${this.layerUrlDevida.capasdevida.observaciones}`,
-			labelingInfo: undefined,
-			popupTemplate: popObservaciones,
-			renderer: undefined,
-			visible: false,
-			labelsVisible: true,
-			group: 'DEVIDA',
-		},
-    {
-			title: 'SEGUNDO ENVIO',
-			url: `${this.layerUrlDevida2.baseServicio}/${this.layerUrlDevida2.capasdevida.parcelas2}`,
-			labelingInfo: undefined,
-			popupTemplate: dosenvio,
-			renderer: undefined,
-			visible: false,
-			labelsVisible: false,
-			group: 'DEVIDA',
-		},
-    {
-			title: 'TERCER ENVIO',
-			url: `${this.layerUrlDevida2.baseServicio}/${this.layerUrlDevida2.capasdevida.parcelas3}`,
-			labelingInfo: undefined,
-			popupTemplate: tresenvio,
-			renderer: undefined,
-			visible: true,
-			labelsVisible: false,
-			group: 'DEVIDA',
-		},
-		{
-			title: 'ACUICOLA - PRODUCCION DE PACOS Y TRUCHAS',
-			url: `${this.layerUrlDevida.baseServicio}/${this.layerUrlDevida.capasdevida.acuicola}`,
-			labelingInfo: undefined,
-			popupTemplate: popAcuicola,
-			renderer: undefined,
-			visible: false,
-			labelsVisible: true,
-			group: 'DEVIDA',
-		},
-		{
-			title: 'CULTIVOS - CAFE & CACAO',
-			url: `${this.layerUrlDevida.baseServicio}/${this.layerUrlDevida.capasdevida.segundoEnvio}`,
-			labelingInfo: undefined,
-			//popupTemplate: popCultivo,
-			renderer: undefined,
-			visible: false,
-			labelsVisible: true,
-			group: 'DEVIDA',
 		},
 
 
@@ -405,6 +370,21 @@ export class GeovisorSharedService {
 
 		//CONTROLES DE FUNCION DEL MAPA (LADO DERECHO)
 		const sourceDEVIDA = [
+        {
+          layer: new FeatureLayer({
+            url: `${this.urldevidaacuicola.baseService}/${this.urldevidaacuicola.capas.ambitoOzZonales}`
+          }),
+          searchFields: ["OZ_DEVIDA"],
+          displayField: "OZ_DEVIDA",
+          exactMatch: false,
+          outFields: ["*"],
+          name: "OFICINA ZONAL",
+          placeholder: "OFIINA ZONAL",
+          maxResults: 4,
+          maxSuggestions: 4,
+          suggestionsEnabled: true,
+          minSuggestCharacters: 1,
+        },
 				{
 					layer: new FeatureLayer({
 						url: `${this.layerUrlDevida.baseServicio}/${this.layerUrlDevida.capasdevida.observaciones}`,
@@ -457,6 +437,7 @@ export class GeovisorSharedService {
 		const buscar = new Search({
 			view: view,
 			sources:sourceDEVIDA,
+      includeDefaultSources: false, // desactiva el World Geocoding Service
 			allPlaceholder: 'Buscar dirección o lugar',
 			label: 'Buscar',
 			locationEnabled: true,
