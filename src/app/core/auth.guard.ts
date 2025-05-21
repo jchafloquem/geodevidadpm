@@ -9,7 +9,6 @@ export const privateGuard = (): CanActivateFn => {
 		const authState = inject(AuthStateService);
 		return authState.authState$.pipe(
 			map(state => {
-				//console.log(state);
 				if(!state){
 					router.navigateByUrl('auth/login');
 					return false;

@@ -19,8 +19,7 @@ import PopupTemplate from "@arcgis/core/PopupTemplate.js";
 import Zoom from '@arcgis/core/widgets/Zoom.js';
 
 //* Popup y Clusters
-const popAcuicola = new PopupTemplate({
-  title: 'CULTIVO DE: {PRODUCCIÓ}',
+const popAcuicola = new PopupTemplate({  title: 'CULTIVO DE: {PRODUCCIÓ}',
   outFields: ["*"],
   content: [
     {
@@ -188,6 +187,36 @@ const tresenvio = new PopupTemplate({
   ],
 });
 
+const cuestionario = new PopupTemplate({
+  title: '{nombre_pta}',
+  outFields: ["*"],
+  content: [
+    {
+      type: 'fields',
+      fieldInfos: [
+        {
+          fieldName: 'tecnico',
+          label: '<b><font>Tecnico DEVIDA</font></b>',
+          visible: true,
+          stringFieldOption: 'text-box',
+        },
+        {
+          fieldName: 'nombre_participante',
+          label: '<b><font>Participante:</font></b>',
+          visible: true,
+          stringFieldOption: 'text-box',
+        },
+        {
+          fieldName: 'area_total',
+          label: '<b><font>Area (ha):</font></b>',
+          visible: true,
+          stringFieldOption: 'text-box',
+        },
+      ],
+    },
+  ],
+});
+
 @Injectable({
   providedIn: 'root',
 })
@@ -195,7 +224,7 @@ const tresenvio = new PopupTemplate({
 export class GeovisorSharedService {
   public mapa = new Map({ basemap: 'satellite' });
   public view!: MapView;
-  public googleMap!: google.maps.Map;
+
 
   //*DATOS_GEOESPACIALES DE IDEP
   public layerUrls = {
@@ -204,7 +233,6 @@ export class GeovisorSharedService {
       departamentos: 'DATOS_GEOESPACIALES/LÍMITES/FeatureServer/3',
       provincias: 'DATOS_GEOESPACIALES/LÍMITES/FeatureServer/4',
       distritos: 'DATOS_GEOESPACIALES/LÍMITES/FeatureServer/5',
-
     }
   }
   //*Servicio de DEVIDA
@@ -216,7 +244,6 @@ export class GeovisorSharedService {
       segundoEnvio: '2',
     }
   };
-
   public urldevidaacuicola = {
     baseService: 'https://services8.arcgis.com/tPY1NaqA2ETpJ86A/arcgis/rest/services',
     capas: {
@@ -224,7 +251,6 @@ export class GeovisorSharedService {
 
     }
   }
-
   //*Servicio de DEVIDA
   public layerUrlDevida2 = {
     baseServicio: 'https://services8.arcgis.com/tPY1NaqA2ETpJ86A/arcgis/rest/services/Map_Service/FeatureServer',
@@ -233,7 +259,20 @@ export class GeovisorSharedService {
       parcelas2: '6',
     }
   };
+  public layerUrlSurveyCacao = {
+    baseServicio: 'https://services8.arcgis.com/tPY1NaqA2ETpJ86A/arcgis/rest/services/Cuestionario_Ubicacion/FeatureServer',
+    capasdevida: {
+      cacao: '5',
+    }
+  };
 
+  public layerUrlEnvioMdagri = {
+    baseServicio: 'https://services8.arcgis.com/tPY1NaqA2ETpJ86A/arcgis/rest/services/poligonos/FeatureServer',
+    poligonos: {
+      cafe: '0',
+      cacao: '1',
+    }
+  };
 
   public layers: LayerConfig[] = [
 
@@ -270,15 +309,39 @@ export class GeovisorSharedService {
 
 
      //*Servicios de capas base
+     {
+      title:'POLIGONOS DE CULTIVO - CAFE',
+      url:`${this.layerUrlEnvioMdagri.baseServicio}/${this.layerUrlEnvioMdagri.poligonos.cafe}`,
+      renderer: undefined,
+      popupTemplate: cuestionario,
+      visible: true,
+      group: 'CARTOGRAFIA DEVIDA'
+     },
+     {
+      title:'POLIGONOS DE CULTIVO - CACAO',
+      url:`${this.layerUrlEnvioMdagri.baseServicio}/${this.layerUrlEnvioMdagri.poligonos.cacao}`,
+      renderer: undefined,
+      popupTemplate: cuestionario,
+      visible: true,
+      group: 'CARTOGRAFIA DEVIDA'
+     },
+     {
+      title:'CUESTIONARIO DE PERCEPCION',
+      url:`${this.layerUrlSurveyCacao.baseServicio}/${this.layerUrlSurveyCacao.capasdevida.cacao}`,
+      renderer: undefined,
+      popupTemplate: cuestionario,
+      visible: true,
+      group: 'CARTOGRAFIA DEVIDA'
+    },
     {
-      title: 'Oficina Zonal',
+      title: 'OFICINA ZONAL',
       url: `${this.urldevidaacuicola.baseService}/${this.urldevidaacuicola.capas.ambitoOzZonales}`,
       labelingInfo: undefined,
       //popupTemplate: popCultivo,
       renderer: undefined,
       visible: true,
       labelsVisible: true,
-      group: 'LIMITES DEVIDA',
+      group: 'CARTOGRAFIA DEVIDA',
     },
 
 
@@ -383,6 +446,21 @@ export class GeovisorSharedService {
         outFields: ["*"],
         name: "Oficina Zonal",
         placeholder: "Ingrese la Oficina Zonal",
+        maxResults: 8,
+        maxSuggestions: 8,
+        suggestionsEnabled: true,
+        minSuggestCharacters: 1,
+      },
+      {
+        layer: new FeatureLayer({
+          url: `${this.layerUrlSurveyCacao.baseServicio}/${this.layerUrlSurveyCacao.capasdevida.cacao}`
+        }),
+        searchFields: ["nombre_participante"],
+        displayField: "nombre_participante",
+        exactMatch: false,
+        outFields: ["*"],
+        name: "Cuestionario",
+        placeholder: "Ingrese participante",
         maxResults: 8,
         maxSuggestions: 8,
         suggestionsEnabled: true,
