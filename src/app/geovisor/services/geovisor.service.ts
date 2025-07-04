@@ -247,6 +247,7 @@ export class GeovisorSharedService {
       limiteDepartamento: 'services/DPM_LIMITES_PIRDAIS/MapServer/5',
       limiteProvincia: 'services/DPM_LIMITES_PIRDAIS/MapServer/7',
       limiteDistrito: 'services/DPM_LIMITES_PIRDAIS/MapServer/8',
+      limitePeru: 'services/DPM_LIMITES_PIRDAIS/MapServer/9',
     }
   }
   public restCaribSurveyPercepcionCafe = {
@@ -296,7 +297,8 @@ export class GeovisorSharedService {
             horizontalAlignment: "center",  // Centrado horizontal
             verticalAlignment: "middle"
           },
-          labelPlacement: "above-center"
+          labelPlacement: "above-center",
+          minScale: 20000,
         }
       ],
       popupTemplate: restCaribSurveyPercepcionCafe,
@@ -304,7 +306,7 @@ export class GeovisorSharedService {
       visible: true,
       labelsVisible: true,
       opacity: 1,
-      group: 'MONITOREO-CAFE',
+      group: 'MONITOREO CAFE',
     },
     {
       title: 'ZA - ZONA DE AMORTIGUAMIENTO',
@@ -428,19 +430,59 @@ export class GeovisorSharedService {
     {
       title: 'DISTRITOS',
       url: `${this.restGeoDevida.serviceBase}/${this.restGeoDevida.capas.limiteDistrito}`,
-      labelingInfo: undefined,
+      labelingInfo: [
+        {
+          labelExpressionInfo: {
+            expression: `"DISTRITO: "+TextFormatting.NewLine+$feature.NOMBDIST`
+          },
+          symbol: {
+            type: "text",
+            color: "#FF0000",
+            font: {
+              size: 12,
+              family: "Arial",
+              weight: "bold"
+            },
+            haloColor: "black",
+            haloSize: 1,
+            horizontalAlignment: "center",  // Centrado horizontal
+            verticalAlignment: "middle"
+          },
+          labelPlacement: "above-center"
+        }
+      ],
       popupTemplate: undefined,
       renderer: undefined,
-      visible: false,
+      visible: true,
       group: 'LIMITES POLITICOS',
     },
     {
       title: 'PROVINCIAS',
       url: `${this.restGeoDevida.serviceBase}/${this.restGeoDevida.capas.limiteProvincia}`,
-      labelingInfo: undefined,
+      labelingInfo: [
+        {
+          labelExpressionInfo: {
+            expression: `"PROVINCIA: "+TextFormatting.NewLine+$feature.NOMBPROV`
+          },
+          symbol: {
+            type: "text",
+            color: "#FFFF00",
+            font: {
+              size: 12,
+              family: "Arial",
+              weight: "bold"
+            },
+            haloColor: "black",
+            haloSize: 1,
+            horizontalAlignment: "center",  // Centrado horizontal
+            verticalAlignment: "middle"
+          },
+          labelPlacement: "above-center"
+        }
+      ],
       popupTemplate: undefined,
       renderer: undefined,
-      visible: false,
+      visible: true,
       labelsVisible: false,
       group: 'LIMITES POLITICOS',
     },
@@ -450,17 +492,17 @@ export class GeovisorSharedService {
       labelingInfo: [
         {
           labelExpressionInfo: {
-            expression: "$feature.NOMBDEP"  // Campo con el nombre del departamento
+            expression: `"DEPARTAMENTO: "+TextFormatting.NewLine+$feature.NOMBDEP`
           },
           symbol: {
             type: "text",
-            color: "black",
+            color: "white",
             font: {
               size: 10,
               family: "Arial",
               weight: "bold"
             },
-            haloColor: "white",
+            haloColor: "black",
             haloSize: 1
           },
           labelPlacement: "always-horizontal",
@@ -471,6 +513,16 @@ export class GeovisorSharedService {
       renderer: undefined,
       visible: true,
       labelsVisible: true,
+      group: 'LIMITES POLITICOS',
+    },
+    {
+      title: 'PERU',
+      url: `${this.restGeoDevida.serviceBase}/${this.restGeoDevida.capas.limitePeru}`,
+      labelingInfo: undefined,
+      popupTemplate: undefined,
+      renderer: undefined,
+      visible: true,
+      labelsVisible: false,
       group: 'LIMITES POLITICOS',
     },
 
