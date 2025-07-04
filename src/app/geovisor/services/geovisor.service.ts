@@ -136,7 +136,6 @@ const caribZA = new PopupTemplate({
     }
   ]
 });
-
 const restCaribSurveyPercepcionCafe = new PopupTemplate({
   // ✔️ Quitar el título evita el encabezado automático de Esri
   title: '',
@@ -221,11 +220,6 @@ const cafeRenderer = new SimpleRenderer({
     style: "circle"
   })
 });
-
-
-
-
-
 @Injectable({
   providedIn: 'root',
 })
@@ -245,39 +239,41 @@ export class GeovisorSharedService {
   //*SERVICIO SISCOD-DEVIDA
   public restGeoDevida = {
     serviceBase: 'https://siscod.devida.gob.pe/server/rest',
-    capas:{
-      oficinaZonal:'services/DPM_LIMITES_PIRDAIS/MapServer/0',
-      bosqueProdPermanente:'services/DPM_LIMITES_PIRDAIS/MapServer/2',
-      zonaAmortiguamiento:'services/DPM_LIMITES_PIRDAIS/MapServer/3',
-      areaNaturalProtegida:'services/DPM_LIMITES_PIRDAIS/MapServer/4',
+    capas: {
+      oficinaZonal: 'services/DPM_LIMITES_PIRDAIS/MapServer/0',
+      bosqueProdPermanente: 'services/DPM_LIMITES_PIRDAIS/MapServer/2',
+      zonaAmortiguamiento: 'services/DPM_LIMITES_PIRDAIS/MapServer/3',
+      areaNaturalProtegida: 'services/DPM_LIMITES_PIRDAIS/MapServer/4',
+      limiteDepartamento: 'services/DPM_LIMITES_PIRDAIS/MapServer/5',
+      limiteProvincia: 'services/DPM_LIMITES_PIRDAIS/MapServer/7',
+      limiteDistrito: 'services/DPM_LIMITES_PIRDAIS/MapServer/8',
     }
   }
-
   public restCaribSurveyPercepcionCafe = {
     serviceBase: 'https://services8.arcgis.com/tPY1NaqA2ETpJ86A/arcgis/rest/services',
-    capas:{
-      cafe:'CUESTIONARIO_DE_PERCEPCION_DE_LA_FAMILIA_%E2%80%93_CAFE_vista/FeatureServer/0',
-
+    capas: {
+      cafe: 'CUESTIONARIO_DE_PERCEPCION_DE_LA_FAMILIA_%E2%80%93_CAFE_vista/FeatureServer/0',
     }
   }
   //*SERVICIOS GLOBALES
   public restAna = {
     serviceBase: 'https://geosnirh.ana.gob.pe/server/rest/services/P%C3%BAblico',
-    capas:{
-      lagunas:'Lagunas/MapServer/36',
-      riosQuebradas:'Rios/MapServer/37',
-      fajaMarginal:'DUA_Acuicola/MapServer/22',
+    capas: {
+      lagunas: 'Lagunas/MapServer/36',
+      riosQuebradas: 'Rios/MapServer/37',
+      fajaMarginal: 'DUA_Acuicola/MapServer/22',
     }
   }
   public restMidagri = {
     serviceBase: 'https://georural.midagri.gob.pe/geoservicios/rest',
-    capas:{
-      predioRural:'services/servicios_ogc/Catastro_Rural/MapServer/0',
-      comunidadCampesina:'services/servicios_ogc/Catastro_Rural/MapServer/1',
-      comunidadNativa:'services/servicios_ogc/Catastro_Rural/MapServer/2',
+    capas: {
+      predioRural: 'services/servicios_ogc/Catastro_Rural/MapServer/0',
+      comunidadCampesina: 'services/servicios_ogc/Catastro_Rural/MapServer/1',
+      comunidadNativa: 'services/servicios_ogc/Catastro_Rural/MapServer/2',
     }
   }
   public layers: LayerConfig[] = [
+
     //*Servicios de capas GEODEVIDA-CARIB
     {
       title: 'CUESTIONARIO PERCEPCION-CAFE',
@@ -307,7 +303,7 @@ export class GeovisorSharedService {
       renderer: cafeRenderer,
       visible: true,
       labelsVisible: true,
-      opacity:1,
+      opacity: 1,
       group: 'MONITOREO-CAFE',
     },
     {
@@ -318,7 +314,7 @@ export class GeovisorSharedService {
       renderer: undefined,
       visible: false,
       labelsVisible: true,
-      opacity:0.5,
+      opacity: 0.5,
       group: 'CARTOGRAFIA DEVIDA',
     },
     {
@@ -329,7 +325,7 @@ export class GeovisorSharedService {
       renderer: undefined,
       visible: false,
       labelsVisible: true,
-      opacity:0.5,
+      opacity: 0.5,
       group: 'CARTOGRAFIA DEVIDA',
     },
     {
@@ -340,7 +336,7 @@ export class GeovisorSharedService {
       renderer: undefined,
       visible: false,
       labelsVisible: true,
-      opacity:0.5,
+      opacity: 0.5,
       group: 'CARTOGRAFIA DEVIDA',
     },
     {
@@ -349,7 +345,7 @@ export class GeovisorSharedService {
       labelingInfo: [
         {
           labelExpressionInfo: {
-            expression: `"Oficina Zonal: "+TextFormatting.NewLine+$feature.nombre`  // Campo con el nombre del departamento
+            expression: `"OFICINA ZONAL: "+TextFormatting.NewLine+$feature.nombre`  // Campo con el nombre del departamento
           },
           symbol: {
             type: "text",
@@ -369,7 +365,7 @@ export class GeovisorSharedService {
       renderer: undefined,
       visible: true,
       labelsVisible: true,
-      opacity:1,
+      opacity: 1,
       group: 'CARTOGRAFIA DEVIDA',
     },
     //*CARGA DE CAPAS DE HIDROGRAFIA
@@ -431,7 +427,7 @@ export class GeovisorSharedService {
     //*CARGA DE CAPAS DE LIMITES POLITICOS (IDEP)
     {
       title: 'DISTRITOS',
-      url: `${this.restIDEP.baseService}/${this.restIDEP.capas.distritos}`,
+      url: `${this.restGeoDevida.serviceBase}/${this.restGeoDevida.capas.limiteDistrito}`,
       labelingInfo: undefined,
       popupTemplate: undefined,
       renderer: undefined,
@@ -440,7 +436,7 @@ export class GeovisorSharedService {
     },
     {
       title: 'PROVINCIAS',
-      url: `${this.restIDEP.baseService}/${this.restIDEP.capas.provincias}`,
+      url: `${this.restGeoDevida.serviceBase}/${this.restGeoDevida.capas.limiteProvincia}`,
       labelingInfo: undefined,
       popupTemplate: undefined,
       renderer: undefined,
@@ -450,7 +446,7 @@ export class GeovisorSharedService {
     },
     {
       title: 'DEPARTAMENTOS',
-      url: `${this.restIDEP.baseService}/${this.restIDEP.capas.departamentos}`,
+      url: `${this.restGeoDevida.serviceBase}/${this.restGeoDevida.capas.limiteDepartamento}`,
       labelingInfo: [
         {
           labelExpressionInfo: {
@@ -477,20 +473,21 @@ export class GeovisorSharedService {
       labelsVisible: true,
       group: 'LIMITES POLITICOS',
     },
-  ];
-    public lis: [] = [];
-    public searchTerm = '';
-    public filteredArray: [] = [];
-    //* Footer coordenadas
-    public gcsLongitude = '--';
-    public gcsLatitude = '--';
-    public utmZone = '--';
-    public utmEast = '--';
-    public utmNorth = '--';
-    public scale = '--';
-    public legend!: Legend;
 
-    constructor() { }
+  ];
+  public lis: [] = [];
+  public searchTerm = '';
+  public filteredArray: [] = [];
+  //* Footer coordenadas
+  public gcsLongitude = '--';
+  public gcsLatitude = '--';
+  public utmZone = '--';
+  public utmEast = '--';
+  public utmNorth = '--';
+  public scale = '--';
+  public legend!: Legend;
+
+  constructor() { }
 
   initializeMap(mapViewEl: ElementRef): Promise<void> {
     const container = mapViewEl.nativeElement;
@@ -503,8 +500,8 @@ export class GeovisorSharedService {
           visible: layerConfig.visible,
           outFields: layerConfig.outFields,
           featureReduction: layerConfig.featureReduction,
-          opacity:layerConfig.opacity,
-          labelingInfo:layerConfig.labelingInfo,
+          opacity: layerConfig.opacity,
+          labelingInfo: layerConfig.labelingInfo,
         });
       }
       else if (layerConfig.popupTemplate && layerConfig.renderer == undefined) {
@@ -515,8 +512,8 @@ export class GeovisorSharedService {
           labelsVisible: layerConfig.labelsVisible,
           visible: layerConfig.visible,
           featureReduction: layerConfig.featureReduction,
-          opacity:layerConfig.opacity,
-          labelingInfo:layerConfig.labelingInfo,
+          opacity: layerConfig.opacity,
+          labelingInfo: layerConfig.labelingInfo,
         });
       }
       else if (layerConfig.popupTemplate && layerConfig.renderer && layerConfig.labelingInfo == undefined) {
@@ -528,8 +525,8 @@ export class GeovisorSharedService {
           visible: layerConfig.visible,
           labelsVisible: layerConfig.labelsVisible,
           featureReduction: layerConfig.featureReduction,
-          opacity:layerConfig.opacity,
-          labelingInfo:layerConfig.labelingInfo,
+          opacity: layerConfig.opacity,
+          labelingInfo: layerConfig.labelingInfo,
         });
       }
       else {
@@ -545,14 +542,14 @@ export class GeovisorSharedService {
           minScale: layerConfig.minScale,
           labelsVisible: layerConfig.labelsVisible,
           featureReduction: layerConfig.featureReduction,
-          opacity:layerConfig.opacity,
+          opacity: layerConfig.opacity,
 
         });
       }
       this.mapa.add(featureLayer);
     });
     //*Creacion de la Vista del Mapa
-    const view = new MapView({
+    this.view = new MapView({
       container: container,
       map: this.mapa,
       center: [-74.00000, -10.00000],
@@ -569,7 +566,7 @@ export class GeovisorSharedService {
       },
     });
     //*Escala del Mapa
-    view.watch('scale', (scale) => {
+    this.view.watch('scale', (scale) => {
       this.scale = this.formatScale(scale);
     });
 
@@ -609,7 +606,7 @@ export class GeovisorSharedService {
         layer: new FeatureLayer({
           url: `${this.restCaribSurveyPercepcionCafe.serviceBase}/${this.restCaribSurveyPercepcionCafe.capas.cafe}`
         }),
-        searchFields: ["dni_participante","tecnico"],
+        searchFields: ["dni_participante", "tecnico"],
         displayField: "dni_participante",
         exactMatch: false,
         outFields: ["*"],
@@ -623,7 +620,7 @@ export class GeovisorSharedService {
     ]
 
     const buscar = new Search({
-      view: view,
+      view: this.view,
       sources: sourceDEVIDA,
       includeDefaultSources: false, // desactiva el World Geocoding Service
       allPlaceholder: 'Buscar dirección o lugar',
@@ -640,12 +637,12 @@ export class GeovisorSharedService {
         const geometry = result.feature.geometry;
         try {
           if (geometry.type === "point") {
-            await view.goTo({
+            await this.view.goTo({
               target: geometry,
               zoom: 17, // Aplica zoom al punto
             });
           } else if (geometry.extent) {
-            await view.goTo({
+            await this.view.goTo({
               target: geometry.extent.expand(1.5), // Aplica zoom a entidades de área
             });
           } else {
@@ -660,19 +657,19 @@ export class GeovisorSharedService {
     });
 
     //{position:'top-right', index:0})
-    view.ui.add(new Zoom({ view }), { position: 'top-right', index: 1 });
-    view.ui.add(new Home({ view }), { position: 'top-right', index: 2 });
-    view.ui.add(new Locate({ view, icon: 'gps-on-f' }), { position: 'top-right', index: 3 });
-    view.ui.add(new Expand({ view, expandTooltip: 'Galeria de Mapas Base', content: new BasemapGallery({ view, icon: 'move-to-basemap' }) }), { position: 'top-right', index: 4 });
+    this.view.ui.add(new Zoom({ view: this.view }), { position: 'top-right', index: 1 });
+    this.view.ui.add(new Home({ view: this.view }), { position: 'top-right', index: 2 });
+    this.view.ui.add(new Locate({ view: this.view, icon: 'gps-on-f' }), { position: 'top-right', index: 3 });
+    this.view.ui.add(new Expand({ view: this.view, expandTooltip: 'Galeria de Mapas Base', content: new BasemapGallery({ view: this.view, icon: 'move-to-basemap' }) }), { position: 'top-right', index: 4 });
 
-    this.legend = new Legend({ view, container: document.createElement('div') });
-    new CoordinateConversion({ view });
-    view.when(() => {
-      view.on('pointer-move', (event) => {
-        const point: any = view.toMap({ x: event.x, y: event.y });
+    this.legend = new Legend({ view: this.view, container: document.createElement('div') });
+    new CoordinateConversion({ view: this.view });
+    this.view.when(() => {
+      this.view.on('pointer-move', (event) => {
+        const point: any = this.view.toMap({ x: event.x, y: event.y });
         if (point) this.updateCoordinates(point.latitude, point.longitude);
       });
-    }); this.view = view;
+    }); this.view;
     return this.view.when();
   } //*Fin <initializeMap>
 
@@ -695,9 +692,10 @@ export class GeovisorSharedService {
     return Object.values(this.capas).filter((layer) => layer.visible);
   }
 
-  updateCoordinates(lat: number, lon: number): void {
+  async updateCoordinates(lat: number, lon: number): Promise<void> {
     this.gcsLongitude = lon.toFixed(5);
     this.gcsLatitude = lat.toFixed(5);
+
     // Calculate UTM Zone
     const zoneNumber = Math.floor((lon + 180) / 6) + 1;
     const utmBand = this.getUtmBand(lat);
@@ -709,18 +707,28 @@ export class GeovisorSharedService {
       longitude: lon,
       spatialReference: SpatialReference.WGS84,
     });
-    const utmWkid = lat >= 0 ? 32600 + zoneNumber : 32700 + zoneNumber; // WKID for UTM zone
-    const projected = projection.project(pointUTM, new SpatialReference({ wkid: utmWkid })) as Point;
 
-    const utmPoint = projected as Point;
-    this.utmEast = `${utmPoint.x.toLocaleString('en-US', {
+      // Cargar proyección
+  await projection.load();
+
+  const utmWkid = lat >= 0 ? 32600 + zoneNumber : 32700 + zoneNumber;
+
+    const srUTM = new SpatialReference({ wkid: utmWkid });
+
+    const projected = projection.project(pointUTM, srUTM) as Point;
+
+    this.utmEast = `${projected.x.toLocaleString('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })} m`;
-    this.utmNorth = `${utmPoint.y.toLocaleString('en-US', {
+
+    this.utmNorth = `${projected.y.toLocaleString('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })} m`;
+
+
+
   }
 
   getUtmBand(latitude: number): string {
