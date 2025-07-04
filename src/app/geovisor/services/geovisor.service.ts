@@ -227,15 +227,6 @@ export class GeovisorSharedService {
   public mapa = new Map({ basemap: 'satellite' });
   public view!: MapView;
 
-  //*DATOS GEOESPACIALES DE IDEP
-  public restIDEP = {
-    baseService: 'https://www.idep.gob.pe/geoportal/rest/services',
-    capas: {
-      departamentos: 'DATOS_GEOESPACIALES/LÍMITES/FeatureServer/3',
-      provincias: 'DATOS_GEOESPACIALES/LÍMITES/FeatureServer/4',
-      distritos: 'DATOS_GEOESPACIALES/LÍMITES/FeatureServer/5',
-    }
-  }
   //*SERVICIO SISCOD-DEVIDA
   public restGeoDevida = {
     serviceBase: 'https://siscod.devida.gob.pe/server/rest',
