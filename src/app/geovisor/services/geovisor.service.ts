@@ -19,10 +19,12 @@ import PopupTemplate from "@arcgis/core/PopupTemplate.js";
 import Zoom from '@arcgis/core/widgets/Zoom.js';
 import SimpleRenderer from "@arcgis/core/renderers/SimpleRenderer";
 import SimpleMarkerSymbol from "@arcgis/core/symbols/SimpleMarkerSymbol";
-import Query from '@arcgis/core/rest/support/Query';
+import PictureMarkerSymbol from "@arcgis/core/symbols/PictureMarkerSymbol";
+import Graphic from "@arcgis/core/Graphic";
+
 
 //* Popup y Clusters
-const caribLimitesOficinaZonal = new PopupTemplate({
+const popupLimitesOficinaZonal = new PopupTemplate({
   title: '',
   outFields: ['*'],
   content: [
@@ -219,7 +221,7 @@ const cafeRenderer = new SimpleRenderer({
     size: 10,
     style: "circle"
   })
-});
+}); 
 @Injectable({
   providedIn: 'root',
 })
@@ -325,7 +327,7 @@ export class GeovisorSharedService {
       title: 'BPP - BOSQUE DE PRODUCCION PERMANENTE',
       url: `${this.restGeoDevida.serviceBase}/${this.restGeoDevida.capas.bosqueProdPermanente}`,
       labelingInfo: undefined,
-      popupTemplate: caribLimitesOficinaZonal,
+      popupTemplate: undefined,
       renderer: undefined,
       visible: false,
       labelsVisible: true,
@@ -354,7 +356,7 @@ export class GeovisorSharedService {
           labelPlacement: "always-horizontal"
         }
       ],
-      popupTemplate: caribLimitesOficinaZonal,
+      popupTemplate: popupLimitesOficinaZonal,
       renderer: undefined,
       visible: true,
       labelsVisible: true,
@@ -434,12 +436,12 @@ export class GeovisorSharedService {
               family: "Arial",
               weight: "bold"
             },
-            haloColor: "black",
+            haloColor: "white",
             haloSize: 1,
-            horizontalAlignment: "center",  // Centrado horizontal
+            //horizontalAlignment: "center",  // Centrado horizontal
             verticalAlignment: "middle"
           },
-          labelPlacement: "above-center"
+          labelPlacement: "always-horizontal"
         }
       ],
       popupTemplate: undefined,
@@ -465,10 +467,10 @@ export class GeovisorSharedService {
             },
             haloColor: "black",
             haloSize: 1,
-            horizontalAlignment: "center",  // Centrado horizontal
+            horizontalAlignment: "center", 
             verticalAlignment: "middle"
           },
-          labelPlacement: "above-center"
+          labelPlacement: "always-horizontal"
         }
       ],
       popupTemplate: undefined,
@@ -494,7 +496,9 @@ export class GeovisorSharedService {
               weight: "bold"
             },
             haloColor: "black",
-            haloSize: 1
+            haloSize: 1,
+            horizontalAlignment: "center", 
+            verticalAlignment: "middle"
           },
           labelPlacement: "always-horizontal",
           minScale: 9000000
@@ -703,7 +707,13 @@ export class GeovisorSharedService {
     this.view.ui.add(new Zoom({ view: this.view }), { position: 'top-right', index: 1 });
     this.view.ui.add(new Home({ view: this.view }), { position: 'top-right', index: 2 });
     this.view.ui.add(new Locate({ view: this.view, icon: 'gps-on-f' }), { position: 'top-right', index: 3 });
-    this.view.ui.add(new Expand({ view: this.view, expandTooltip: 'Galeria de Mapas Base', content: new BasemapGallery({ view: this.view, icon: 'move-to-basemap' }) }), { position: 'top-right', index: 4 });
+    this.view.ui.add(new Expand({
+      view: this.view,
+      expandTooltip: 'Galeria de Mapas Base',
+      content: new BasemapGallery({
+        view: this.view,
+        icon: 'move-to-basemap'})
+      }),{ position: 'top-right', index: 4 });
 
     this.legend = new Legend({ view: this.view, container: document.createElement('div') });
     new CoordinateConversion({ view: this.view });
@@ -769,9 +779,6 @@ export class GeovisorSharedService {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })} m`;
-
-
-
   }
 
   getUtmBand(latitude: number): string {

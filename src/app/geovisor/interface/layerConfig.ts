@@ -9,13 +9,13 @@ export interface LayerConfig {
 	geometryType?: string;
 	group: string; //* Agrupación de capas
 	labelingInfo: any,
-  
+
 	labelsVisible?:boolean
 	maxScale?: number;
 	minScale?: number;
 	outFields?: string[];
 	popupTemplate?: PopupTemplate;
-	renderer?: SimpleRenderer;
+	renderer?: any;
 	title: string;
 	url: string;
 	visible: boolean;
